@@ -31,7 +31,8 @@ int main(int argc, char *argv[]) {
 
     GraphicBoard *window = new GraphicBoard(&game);
 
-//    window->setPieces(game.get_set());
+//    window->gridInit(game.get_set());
+    window->setPieces(game.get_set());
     window->show();
 
     return app.exec();

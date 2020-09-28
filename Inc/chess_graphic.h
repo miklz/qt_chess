@@ -12,6 +12,7 @@ class GraphicBoard : public QWidget {
     public:
         GraphicBoard(ChessGame *game, QWidget *parent = 0);
 
+        void gridInit(std::vector<Square*> squares);
         void paintEvent(QPaintEvent* pe);
         void setPieces(std::vector<Square*> squares);
 
@@ -19,4 +20,5 @@ class GraphicBoard : public QWidget {
 
     private:
         ChessGame *chessGame;
+        QGridLayout *grid;
 };

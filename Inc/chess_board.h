@@ -26,7 +26,7 @@ class Piece {
         };
 
         QPixmap get_icon() {
-            return icon;
+            return _icon;
         };
 
         virtual bool validMove(Square *start, Square *end, std::vector<Square*> squares) = 0;
@@ -35,7 +35,7 @@ class Piece {
     protected:
         PieceColor _color;
         PieceType _type;
-        QPixmap icon;
+        QPixmap _icon;
 
         Square* getSquare(std::vector<Square*> list, Square *find);
 };
@@ -73,9 +73,9 @@ class Pawn : public Piece {
     public:
         Pawn(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                icon.load("icons/Chess_rlt45_pawn.svg");
+                _icon.load("icons/Chess_plt45_pawn.svg");
             } else {
-                icon.load("icons/Chess_rdt45_pawn.svg");
+                _icon.load("icons/Chess_pdt45_pawn.svg");
             }
         };
 
@@ -93,9 +93,9 @@ class Knight : public Piece {
     public:
         Knight(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                icon.load("icons/Chess_rlt45_knight.svg");
+                _icon.load("icons/Chess_nlt45_knight.svg");
             } else {
-                icon.load("icons/Chess_rdt45_knight.svg");
+                _icon.load("icons/Chess_ndt45_knight.svg");
             }
         };
 
@@ -108,9 +108,9 @@ class Bishop : public Piece {
     public:
         Bishop(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                icon.load("icons/Chess_rlt45_bishop.svg");
+                _icon.load("icons/Chess_blt45_bishop.svg");
             } else {
-                icon.load("icons/Chess_rdt45_bishop.svg");
+                _icon.load("icons/Chess_bdt45_bishop.svg");
             }
         };
 
@@ -123,9 +123,9 @@ class Rook : public Piece {
     public:
         Rook(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                icon.load("icons/Chess_rlt45_rook.svg");
+                _icon.load("icons/Chess_rlt45_rook.svg");
             } else {
-                icon.load("icons/Chess_rdt45_rook.svg");
+                _icon.load("icons/Chess_rdt45_rook.svg");
             }
         };
 
@@ -138,9 +138,9 @@ class Queen : public Piece {
     public:
         Queen(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                icon.load("icons/Chess_rlt45_queen.svg");
+                _icon.load("icons/Chess_qlt45_queen.svg");
             } else {
-                icon.load("icons/Chess_rdt45_queen.svg");
+                _icon.load("icons/Chess_qdt45_queen.svg");
             }
         };
 
@@ -153,9 +153,9 @@ class King : public Piece {
     public:
         King(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                icon.load("icons/Chess_rlt45_king.svg");
+                _icon.load("icons/Chess_klt45_king.svg");
             } else {
-                icon.load("icons/Chess_rdt45_king.svg");
+                _icon.load("icons/Chess_kdt45_king.svg");
             }
         };
 
