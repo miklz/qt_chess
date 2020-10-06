@@ -13,12 +13,15 @@ class GraphicBoard : public QWidget {
         GraphicBoard(ChessGame *game, QWidget *parent = 0);
 
         void gridInit(std::vector<Square*> squares);
-        void paintEvent(QPaintEvent* pe);
         void setPieces(std::vector<Square*> squares);
 
-        //~GraphicBoard();
-
     private:
+        std::vector<Square*> chess_board;
         ChessGame *chessGame;
         QGridLayout *grid;
+        Square *start;
+        Square *end;
+
+        void mousePressEvent(QMouseEvent *ev);
+        void mouseReleaseEvent(QMouseEvent *ev);
 };

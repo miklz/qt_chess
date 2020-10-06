@@ -8,35 +8,20 @@
 
 GraphicBoard::GraphicBoard(ChessGame *game, QWidget *parent) : chessGame(game), QWidget(parent) {
 
+    start = nullptr;
+    end = nullptr;
     setMinimumSize(Window_X, Window_Y);
-}
 
-void GraphicBoard::paintEvent(QPaintEvent* pe) {
-    // Initialization
-    unsigned int numCellX = 8, numCellY = 8;
-    QRect wRect = rect();
-    unsigned int cellSizeX = wRect.width() / numCellX;
-    unsigned int cellSizeY = wRect.height() / numCellY;
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+    gridInit(game->get_set());
 
-    // Draw the background. The whole widget is drawed.
-    painter.setBrush(QColor(0,0,255)); //blue
-    painter.drawRect(wRect);
-
-    // Draw the cells which are of the other color
-    // Note: the grid may not fit in the whole rect, because the size of the widget
-    // should be a multiple of the size of the cells. If not, a black line at the right
-    // and at the bottom may appear.
-    painter.setBrush(QColor(255,255,255)); //white
-    for(unsigned int j = 0; j < numCellY; j++)
-        for(unsigned int i = j % 2; i < numCellX; i+=2)
-            painter.drawRect(i * cellSizeX, j * cellSizeY, cellSizeX, cellSizeY);
 }
 
 void GraphicBoard::gridInit(std::vector<Square*> squares) {
 
     QGridLayout *grid = new QGridLayout(this);
+    grid->setContentsMargins(0,0,0,0);
+    grid->setSizeConstraint(QLayout::SetNoConstraint);
+    //grid->setSpacing(1);
 
     for(auto & it: squares) {
         int row = it->get_row();
@@ -44,17 +29,25 @@ void GraphicBoard::gridInit(std::vector<Square*> squares) {
         Piece *piece = it->getPiece();
 
         QLabel *tile = new QLabel(this);
+        QPixmap wSquare, bSquare;
+        wSquare.load("icons/square.png");
+        bSquare.load("icons/blue_square.png");
 
         if((row + col)%2) {
             tile->setStyleSheet("QLabel {background-color: white;}");
+            tile->setPixmap(wSquare);
         } else {
             tile->setStyleSheet("QLabel {background-color: blue;}");
+            tile->setPixmap(bSquare);
         }
 
         if(piece != nullptr) {
             tile->setPixmap(piece->get_icon());
         }
 
+        //tile->setContentsMargins(0,0,0,0);
+        //tile->setScaledContents(true);
+        tile->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
         grid->addWidget(tile, (7 - row), col, Qt::AlignCenter);
     }
 
@@ -63,16 +56,55 @@ void GraphicBoard::gridInit(std::vector<Square*> squares) {
 
 void GraphicBoard::setPieces(std::vector<Square*> squares) {
 
+    QLayout *layout = this->layout();
     for(auto & it: squares) {
         int row = it->get_row();
         int col = it->get_column();
         Piece *p = it->getPiece();
 
-        if(p) {
-            QLabel *piece = new QLabel(this);
-            piece->setPixmap(p->get_icon());
-            piece->setGeometry(col*Square_X + 5, (7 - row)*Square_Y, Square_X, Square_Y);
-            piece->show();
+        QPixmap wSquare, bSquare;
+        wSquare.load("icons/square.png");
+        bSquare.load("icons/blue_square.png");
+
+        Q_ASSERT(layout->count() == 64);
+        QLayoutItem* const item = layout->itemAt(8*(7 - row) + col);
+        if(item) {
+            QLabel *tile = dynamic_cast<QLabel*> (item->widget());
+            if((row + col)%2) {
+                tile->setPixmap(wSquare);
+            } else {
+                tile->setPixmap(bSquare);
+            }
+
+            if(p) {
+                tile->setPixmap(p->get_icon());
+            }
         }
+    }
+}
+
+void GraphicBoard::mousePressEvent(QMouseEvent *ev) {
+
+    int x, y;
+    x = ev->x()/Square_X;
+    y = 7 - (ev->y()/Square_Y);
+
+
+    if(start==nullptr) {
+        start = chessGame->squareAt(new Square(y, x));
+    } else if(end == nullptr) {
+        end = chessGame->squareAt(new Square(y, x));
+    }
+
+    std::cout << "(" << y << "," << x << ")" << std::endl;
+}
+
+void GraphicBoard::mouseReleaseEvent(QMouseEvent *ev) {
+
+    if((start != nullptr) && (end !=nullptr)) {
+        chessGame->makeMove(start, end);
+        start = nullptr;
+        end = nullptr;
+        setPieces(chessGame->get_set());
     }
 }

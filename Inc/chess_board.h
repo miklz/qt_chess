@@ -63,6 +63,7 @@ class Square {
             _piece = piece;
         };
 
+
     private:
         int _row;
         int _column;
@@ -232,14 +233,21 @@ class ChessGame : public Board {
 
         // Performs a move and retorn true if succeds or false if not
         bool makeMove(Square *start, Square *end) {
+            std::cout << "makeMove" << std::endl;
             Square *begin = getSquare(chess_board, start);
             Square *fini = getSquare(chess_board, end);
-            Piece *toMove = begin->getPiece();
+            Piece *toMove = start->getPiece();
+            if(toMove == nullptr) {
+                return false;
+            }
+            std::cout << "VerifyValidity" << std::endl;
             if(toMove->validMove(start, end, chess_board)) {
                 begin->setPiece(nullptr);
                 fini->setPiece(toMove);
+                std::cout << "Valid Move" << std::endl;
                 return true;
             }
+                std::cout << "Invalid Move" << std::endl;
             return false;
         }
 
@@ -319,8 +327,9 @@ class ChessGame : public Board {
             for(it = list.begin(); it != list.end(); ++it) {
                 row = (*it)->get_row();
                 col = (*it)->get_column();
-                if((row == find->get_row()) && (col == find->get_column()))
+                if((row == find->get_row()) && (col == find->get_column())) {
                     break;
+                }
             }
             return *it;
         }

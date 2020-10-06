@@ -47,6 +47,8 @@ bool Pawn::validMove(Square *start, Square *end, std::vector<Square*> squares) {
         return false;
     }
 
+    Moved = true;
+
     return true;
 }
 
@@ -55,15 +57,16 @@ bool Pawn::handleBlock(Square *start, Square *end, std::vector<Square*> squares)
     int col_fini = end->get_column();
 
     if(col_fini == col_begin) {
-        if(end->getPiece() != nullptr) {
-            return true;
+        if(end->getPiece() == nullptr) {
+            return false;
         }
     }
 
-    if(end->getPiece()->color() == _color) {
-        return true;
+    if(end->getPiece()) {
+        if(end->getPiece()->color() == _color) {
+            return true;
+        }
     }
-
     return false;
 }
 
@@ -96,6 +99,10 @@ bool Knight::validMove(Square *start, Square *end, std::vector<Square*> squares)
 }
 
 bool Knight::handleBlock(Square *start, Square *end, std::vector<Square*> squares) {
+
+    if(end->getPiece() == nullptr) {
+        return false;
+    }
 
     if(end->getPiece()->color() == _color) {
         return true;
