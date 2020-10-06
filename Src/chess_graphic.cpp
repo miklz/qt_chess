@@ -21,7 +21,7 @@ void GraphicBoard::gridInit(std::vector<Square*> squares) {
     QGridLayout *grid = new QGridLayout(this);
     grid->setContentsMargins(0,0,0,0);
     grid->setSizeConstraint(QLayout::SetNoConstraint);
-    //grid->setSpacing(1);
+    grid->setSpacing(0);
 
     for(auto & it: squares) {
         int row = it->get_row();
@@ -45,8 +45,8 @@ void GraphicBoard::gridInit(std::vector<Square*> squares) {
             tile->setPixmap(piece->get_icon());
         }
 
-        //tile->setContentsMargins(0,0,0,0);
-        //tile->setScaledContents(true);
+        tile->setContentsMargins(0,0,0,0);
+        tile->setScaledContents(true);
         tile->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
         grid->addWidget(tile, (7 - row), col, Qt::AlignCenter);
     }

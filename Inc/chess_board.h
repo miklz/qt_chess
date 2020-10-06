@@ -85,7 +85,7 @@ class Pawn : public Piece {
         bool handleBlock(Square *start, Square *end, std::vector<Square*> squares);
 
     private:
-        bool Moved;
+        bool Moved = false;
         bool Promoted;
         //Piece promoteTo;
 };
@@ -237,14 +237,29 @@ class ChessGame : public Board {
             Square *begin = getSquare(chess_board, start);
             Square *fini = getSquare(chess_board, end);
             Piece *toMove = start->getPiece();
+
+            // Confirms if there's a piece there
             if(toMove == nullptr) {
                 return false;
             }
+
+            // Of who is the turn
+            if(toMove->color() != _turn) {
+                return false;
+            }
+
             std::cout << "VerifyValidity" << std::endl;
             if(toMove->validMove(start, end, chess_board)) {
                 begin->setPiece(nullptr);
                 fini->setPiece(toMove);
                 std::cout << "Valid Move" << std::endl;
+
+                // Change Turns
+                if(toMove->color() == PieceColor::White) {
+                    _turn = PieceColor::Black;
+                } else {
+                    _turn = PieceColor::White;
+                }
                 return true;
             }
                 std::cout << "Invalid Move" << std::endl;
@@ -262,50 +277,6 @@ class ChessGame : public Board {
 
         // Returns true if we got to a checkmate false if not
         bool checkMate(PieceColor status);
-
-        // Draw the board
-        void print_board(void) {
-            int linebr = 0;
-            for(auto & it: chess_board) {
-                Piece *p = it->getPiece();
-                if(p) {
-                    if(p->color() == PieceColor::White) {
-                        if(p->type() == PieceType::Rook) {
-                            std::cout << "WRk";
-                        } else if(p->type() == PieceType::Knight) {
-                            std::cout << "WKt";
-                        } else if(p->type() == PieceType::Bishop) {
-                            std::cout << "WBp";
-                        } else if(p->type() == PieceType::King) {
-                            std::cout << "WKg";
-                        } else if(p->type() == PieceType::Queen) {
-                            std::cout << "WQn";
-                        } else if(p->type() == PieceType::Pawn) {
-                            std::cout << "WPw";
-                        }
-                    } else if(p->color() == PieceColor::Black) {
-                        if(p->type() == PieceType::Rook) {
-                            std::cout << "BRk";
-                        } else if(p->type() == PieceType::Knight) {
-                            std::cout << "BKt";
-                        } else if(p->type() == PieceType::Bishop) {
-                            std::cout << "BBp";
-                        } else if(p->type() == PieceType::King) {
-                            std::cout << "BKg";
-                        } else if(p->type() == PieceType::Queen) {
-                            std::cout << "BQn";
-                        } else if(p->type() == PieceType::Pawn) {
-                            std::cout << "BPw";
-                        }
-                    }
-                } else {
-                    std::cout << "xxx";
-                }
-                std::cout << " ";
-                if((++linebr) % 8 == 0)
-                    std::cout << std::endl;
-            }
-        }
 
         std::vector<Square*> get_set() {
             return chess_board;
@@ -335,4 +306,7 @@ class ChessGame : public Board {
         }
         // What piece is being checked
         PieceColor _status;
+
+        // Which player has the turn
+        PieceColor _turn = PieceColor::White;
 };

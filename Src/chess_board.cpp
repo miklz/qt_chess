@@ -43,7 +43,7 @@ bool Pawn::validMove(Square *start, Square *end, std::vector<Square*> squares) {
         return false;
     }
 
-    if(!Moved && ((row_offset > 1) || (row_offset < -1))) {
+    if(Moved && ((row_offset > 1) || (row_offset < -1))) {
         return false;
     }
 
@@ -121,11 +121,15 @@ bool Bishop::validMove(Square *start, Square *end, std::vector<Square*> squares)
     int x = col_fini - col_begin;
     int y = row_fini - row_begin;
 
-    if(x != y) {
+    if((x != -y) && (x != y)) {
+        std::cout << "x != y ?" << std::endl;
         return false;
     }
 
+    std::cout << "Check Block" << std::endl;
+
     if(handleBlock(start, end, squares)) {
+        std::cout << "Blocked ?" << std::endl;
         return false;
     }
 
@@ -134,8 +138,10 @@ bool Bishop::validMove(Square *start, Square *end, std::vector<Square*> squares)
 
 bool Bishop::handleBlock(Square *start, Square *end, std::vector<Square*> squares) {
 
-    if(end->getPiece()->color() == _color) {
-        return true;
+    if(end->getPiece()) {
+        if(end->getPiece()->color() == _color) {
+            return true;
+        }
     }
 
     int row_begin = start->get_row();
@@ -269,7 +275,7 @@ bool Queen::validMove(Square *start, Square *end, std::vector<Square*> squares) 
     int x = col_fini - col_begin;
     int y = row_fini - row_begin;
 
-    if((row_begin != row_fini) && (col_begin != col_fini) && (x != y)) {
+    if((row_begin != row_fini) && (col_begin != col_fini) && (x != y) && (x != -y)) {
         return false;
     }
 
