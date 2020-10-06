@@ -21,7 +21,7 @@ void GraphicBoard::gridInit(std::vector<Square*> squares) {
     QGridLayout *grid = new QGridLayout(this);
     grid->setContentsMargins(0,0,0,0);
     grid->setSizeConstraint(QLayout::SetNoConstraint);
-    grid->setSpacing(0);
+    grid->setSpacing(5);
 
     for(auto & it: squares) {
         int row = it->get_row();

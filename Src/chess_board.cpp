@@ -122,14 +122,10 @@ bool Bishop::validMove(Square *start, Square *end, std::vector<Square*> squares)
     int y = row_fini - row_begin;
 
     if((x != -y) && (x != y)) {
-        std::cout << "x != y ?" << std::endl;
         return false;
     }
 
-    std::cout << "Check Block" << std::endl;
-
     if(handleBlock(start, end, squares)) {
-        std::cout << "Blocked ?" << std::endl;
         return false;
     }
 
@@ -155,32 +151,32 @@ bool Bishop::handleBlock(Square *start, Square *end, std::vector<Square*> square
     Piece *piece;
     Square *empty;
     if((x > 0) && (y > 0)) {
-        for(int i = col_begin + 1; i < col_fini; ++i) {
-            empty = getSquare(squares, new Square(i, i));
+        for(int i = 1; i < x; ++i) {
+            empty = getSquare(squares, new Square(row_begin + i, col_begin + i));
             piece = empty->getPiece();
             if(piece != nullptr) {
                 return true;
             }
         }
     } else if((x > 0) && (y < 0)) {
-        for(int i = col_begin + 1; i < col_fini; ++i) {
-            empty = getSquare(squares, new Square(-i, i));
+        for(int i = 1; i < x; ++i) {
+            empty = getSquare(squares, new Square(row_begin - i, col_begin + i));
             piece = empty->getPiece();
             if(piece != nullptr) {
                 return true;
             }
         }
     } else if((x < 0) && (y > 0)) {
-        for(int i = row_begin + 1; i < row_fini; ++i) {
-            empty = getSquare(squares, new Square(i, -i));
+        for(int i = 1; i < y; ++i) {
+            empty = getSquare(squares, new Square(row_begin + i, col_begin - i));
             piece = empty->getPiece();
             if(piece != nullptr) {
                 return true;
             }
         }
     } else {
-        for(int i = row_fini - 1; i < row_begin; ++i) {
-            empty = getSquare(squares, new Square(i, i));
+        for(int i = 1; i < -x; ++i) {
+            empty = getSquare(squares, new Square(row_begin - i, col_begin - i));
             piece = empty->getPiece();
             if(piece != nullptr) {
                 return true;
@@ -287,8 +283,10 @@ bool Queen::validMove(Square *start, Square *end, std::vector<Square*> squares) 
 }
 
 bool Queen::handleBlock(Square *start, Square *end, std::vector<Square*> squares) {
-    if(end->getPiece()->color() == _color) {
-        return true;
+    if(end->getPiece()) {
+        if(end->getPiece()->color() == _color) {
+            return true;
+        }
     }
 
     int row_begin = start->get_row();
@@ -339,32 +337,32 @@ bool Queen::handleBlock(Square *start, Square *end, std::vector<Square*> squares
         }
     } else {
         if((x > 0) && (y > 0)) {
-            for(int i = col_begin + 1; i < col_fini; ++i) {
-                empty = getSquare(squares, new Square(i, i));
+            for(int i = 1; i < x; ++i) {
+                empty = getSquare(squares, new Square(row_begin + i, col_begin + i));
                 piece = empty->getPiece();
                 if(piece != nullptr) {
                     return true;
                 }
             }
         } else if((x > 0) && (y < 0)) {
-            for(int i = col_begin + 1; i < col_fini; ++i) {
-                empty = getSquare(squares, new Square(-i, i));
+            for(int i = 1; i < x; ++i) {
+                empty = getSquare(squares, new Square(row_begin - i, col_begin + i));
                 piece = empty->getPiece();
                 if(piece != nullptr) {
                     return true;
                 }
             }
         } else if((x < 0) && (y > 0)) {
-            for(int i = row_begin + 1; i < row_fini; ++i) {
-                empty = getSquare(squares, new Square(i, -i));
+            for(int i = 1; i < y; ++i) {
+                empty = getSquare(squares, new Square(row_begin + i, col_begin - i));
                 piece = empty->getPiece();
                 if(piece != nullptr) {
                     return true;
                 }
             }
         } else {
-            for(int i = row_fini - 1; i < row_begin; ++i) {
-                empty = getSquare(squares, new Square(i, i));
+            for(int i = 1; i < -x; ++i) {
+                empty = getSquare(squares, new Square(row_begin - i, col_begin - i));
                 piece = empty->getPiece();
                 if(piece != nullptr) {
                     return true;
@@ -399,8 +397,10 @@ bool King::validMove(Square *start, Square *end, std::vector<Square*> squares) {
 
 bool King::handleBlock(Square *start, Square *end, std::vector<Square*> squares) {
 
-    if(end->getPiece()->color() == _color) {
-        return true;
+    if(end->getPiece()) {
+        if(end->getPiece()->color() == _color) {
+            return true;
+        }
     }
 
     return false;
