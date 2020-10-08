@@ -6,7 +6,7 @@
 #define Square_X 50
 #define Square_Y 50
 
-GraphicBoard::GraphicBoard(ChessGame *game, QWidget *parent) : chessGame(game), QWidget(parent) {
+GraphicBoard::GraphicBoard(ChessGame *game, QWidget *parent) :QWidget(parent), chessGame(game) {
 
     start = nullptr;
     end = nullptr;
