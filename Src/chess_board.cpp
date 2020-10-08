@@ -39,6 +39,9 @@ bool Pawn::validMove(Square *start, Square *end, std::vector<Square*> squares) {
     }
 
     int row_offset = row_fini - row_begin;
+    if(((_color == PieceColor::White) && (row_offset < 0)) || ((_color == PieceColor::Black) && (row_offset > 0))) {
+        return false;
+    }
     if((row_offset > 2) || (row_offset < -2)) {
         return false;
     }
@@ -207,8 +210,10 @@ bool Rook::validMove(Square *start, Square *end, std::vector<Square*> squares) {
 
 bool Rook::handleBlock(Square *start, Square *end, std::vector<Square*> squares) {
 
-    if(end->getPiece()->color() == _color) {
-        return false;
+    if(end->getPiece()) {
+        if(end->getPiece()->color() == _color) {
+            return false;
+        }
     }
 
     int row_begin = start->get_row();
@@ -229,7 +234,7 @@ bool Rook::handleBlock(Square *start, Square *end, std::vector<Square*> squares)
                 }
             }
         } else {
-            for(int i = col_fini - 1; i < col_begin; ++i) {
+            for(int i = col_fini + 1; i < col_begin; ++i) {
                 empty = getSquare(squares, new Square(row_begin, i));
                 piece = empty->getPiece();
                 if(piece != nullptr) {
@@ -309,7 +314,7 @@ bool Queen::handleBlock(Square *start, Square *end, std::vector<Square*> squares
                 }
             }
         } else {
-            for(int i = col_fini - 1; i < col_begin; ++i) {
+            for(int i = col_fini + 1; i < col_begin; ++i) {
                 empty = getSquare(squares, new Square(row_begin, i));
                 piece = empty->getPiece();
                 if(piece != nullptr) {

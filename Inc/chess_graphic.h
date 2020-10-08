@@ -13,7 +13,7 @@ class GraphicBoard : public QWidget {
         GraphicBoard(ChessGame *game, QWidget *parent = 0);
 
         void gridInit(std::vector<Square*> squares);
-        void setPieces(std::vector<Square*> squares);
+        void setPieces(std::vector<Square*> squares, Square *last_move);
 
     private:
         std::vector<Square*> chess_board;

@@ -233,7 +233,6 @@ class ChessGame : public Board {
 
         // Performs a move and retorn true if succeds or false if not
         bool makeMove(Square *start, Square *end) {
-            std::cout << "makeMove" << std::endl;
             Square *begin = getSquare(chess_board, start);
             Square *fini = getSquare(chess_board, end);
             Piece *toMove = start->getPiece();
@@ -248,11 +247,9 @@ class ChessGame : public Board {
                 return false;
             }
 
-            std::cout << "VerifyValidity" << std::endl;
             if(toMove->validMove(start, end, chess_board)) {
                 begin->setPiece(nullptr);
                 fini->setPiece(toMove);
-                std::cout << "Valid Move" << std::endl;
 
                 // Change Turns
                 if(toMove->color() == PieceColor::White) {
@@ -262,7 +259,6 @@ class ChessGame : public Board {
                 }
                 return true;
             }
-                std::cout << "Invalid Move" << std::endl;
             return false;
         }
 
@@ -282,8 +278,17 @@ class ChessGame : public Board {
             return chess_board;
         }
 
-        Square* squareAt(Square* find) {
-            return getSquare(chess_board, find);
+        Square* squareAt(int row, int col) {
+            int row_s, col_s;
+            auto it = chess_board.begin();
+            for(it = chess_board.begin(); it != chess_board.end(); ++it) {
+                row_s = (*it)->get_row();
+                col_s = (*it)->get_column();
+                if((row_s == row) && (col_s == col)) {
+                    break;
+                }
+            }
+            return *it;
         }
 
         ~ChessGame() {
