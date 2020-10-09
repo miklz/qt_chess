@@ -30,3 +30,5 @@ MOC_DIR = ./build
 DESTDIR = ./build
 OBJECTS_DIR = ./build
 
+# Images
+RESOURCES += images.qrc

@@ -30,8 +30,8 @@ void GraphicBoard::gridInit(std::vector<Square*> squares) {
 
         QLabel *tile = new QLabel(this);
         QPixmap wSquare, bSquare;
-        wSquare.load("icons/square.png");
-        bSquare.load("icons/black_square.png");
+        wSquare.load(":/icons/square.png");
+        bSquare.load(":/icons/black_square.png");
 
         if((row + col)%2) {
             tile->setStyleSheet("QLabel {background-color: white;}");
@@ -63,8 +63,8 @@ void GraphicBoard::setPieces(std::vector<Square*> squares, Square *last_move) {
         Piece *p = it->getPiece();
 
         QPixmap wSquare, bSquare;
-        wSquare.load("icons/square.png");
-        bSquare.load("icons/black_square.png");
+        wSquare.load(":/icons/square.png");
+        bSquare.load(":/icons/black_square.png");
 
         Q_ASSERT(layout->count() == 64);
         QLayoutItem* const item = layout->itemAt(8*(7 - row) + col);
@@ -79,8 +79,10 @@ void GraphicBoard::setPieces(std::vector<Square*> squares, Square *last_move) {
                 tile->setStyleSheet("QLabel {background-color: rgb(57, 57, 57);}");
             }
 
-            if((row == last_move->get_row()) && (col == last_move->get_column())) {
-                tile->setStyleSheet("QLabel {background-color: rgb(245, 235, 107);}");
+            if(last_move != nullptr) {
+                if((row == last_move->get_row()) && (col == last_move->get_column())) {
+                    tile->setStyleSheet("QLabel {background-color: rgb(245, 235, 107);}");
+                }
             }
 
             if(p) {
@@ -97,11 +99,19 @@ void GraphicBoard::mousePressEvent(QMouseEvent *ev) {
     y = 7 - (ev->y()/Square_Y);
 
     if(start == nullptr) {
-        QLayout *layout = this->layout();
-        QLayoutItem* const item = layout->itemAt(8*(7 - y) + x);
-        QLabel *tile = dynamic_cast<QLabel*> (item->widget());
-        tile->setStyleSheet("QLabel {background-color: rgb(202, 143, 247);}");
         start = chessGame->squareAt(y, x);
+        if(start->getPiece()) {
+            if(start->getPiece()->color() == chessGame->colorTurn()) {
+                QLayout *layout = this->layout();
+                QLayoutItem* const item = layout->itemAt(8*(7 - y) + x);
+                QLabel *tile = dynamic_cast<QLabel*> (item->widget());
+                tile->setStyleSheet("QLabel {background-color: rgb(202, 143, 247);}");
+            } else {
+                start = nullptr;
+            }
+        } else {
+            start = nullptr;
+        }
     } else if(end == nullptr) {
         end = chessGame->squareAt(y, x);
     }
@@ -113,6 +123,9 @@ void GraphicBoard::mouseReleaseEvent(QMouseEvent *ev) {
     if((start != nullptr) && (end != nullptr)) {
         if(chessGame->makeMove(start, end)) {
             setPieces(chessGame->get_set(), end);
+            last_valid_move = end;
+        } else {
+            setPieces(chessGame->get_set(), last_valid_move);
         }
         start = nullptr;
         end = nullptr;

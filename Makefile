@@ -52,10 +52,12 @@ OBJECTS_DIR   = build/
 
 SOURCES       = Src/chess_board.cpp \
 		Src/chess_graphic.cpp \
-		Src/main.cpp build/moc_chess_graphic.cpp
+		Src/main.cpp qrc_images.cpp \
+		build/moc_chess_graphic.cpp
 OBJECTS       = build/chess_board.o \
 		build/chess_graphic.o \
 		build/main.o \
+		build/qrc_images.o \
 		build/moc_chess_graphic.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -114,6 +116,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -206,6 +209,7 @@ Makefile: qt_chess.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.con
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -225,6 +229,7 @@ Makefile: qt_chess.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.con
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		qt_chess.pro \
+		images.qrc \
 		/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Core.prl
@@ -286,6 +291,7 @@ Makefile: qt_chess.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.con
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -305,6 +311,7 @@ Makefile: qt_chess.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.con
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 qt_chess.pro:
+images.qrc:
 /usr/lib/x86_64-linux-gnu/libQt5Widgets.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Core.prl:
@@ -322,6 +329,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents images.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents Inc/chess_board.h Inc/chess_graphic.h Inc/chess_pieces.h $(DISTDIR)/
 	$(COPY_FILE) --parents Src/chess_board.cpp Src/chess_graphic.cpp Src/main.cpp $(DISTDIR)/
@@ -348,8 +356,27 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_images.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_images.cpp
+qrc_images.cpp: images.qrc \
+		/usr/lib/qt5/bin/rcc \
+		icons/Chess_qlt45_queen.svg \
+		icons/Chess_qdt45_queen.svg \
+		icons/Chess_klt45_king.svg \
+		icons/Chess_bdt45_bishop.svg \
+		icons/Chess_kdt45_king.svg \
+		icons/Chess_rlt45_rook.svg \
+		icons/Chess_blt45_bishop.svg \
+		icons/Chess_ndt45_knight.svg \
+		icons/Chess_plt45_pawn.svg \
+		icons/square.png \
+		icons/Chess_rdt45_rook.svg \
+		icons/Chess_nlt45_knight.svg \
+		icons/Chess_pdt45_pawn.svg \
+		icons/black_square.png
+	/usr/lib/qt5/bin/rcc -name images images.qrc -o qrc_images.cpp
+
 compiler_moc_predefs_make_all: build/moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) build/moc_predefs.h
@@ -377,7 +404,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
@@ -391,6 +418,9 @@ build/chess_graphic.o: Src/chess_graphic.cpp Inc/chess_graphic.h \
 build/main.o: Src/main.cpp Inc/chess_board.h \
 		Inc/chess_graphic.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/main.o Src/main.cpp
+
+build/qrc_images.o: qrc_images.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/qrc_images.o qrc_images.cpp
 
 build/moc_chess_graphic.o: build/moc_chess_graphic.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/moc_chess_graphic.o build/moc_chess_graphic.cpp

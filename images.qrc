@@ -1,0 +1,18 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+        <file>icons/Chess_bdt45_bishop.svg</file>
+        <file>icons/Chess_blt45_bishop.svg</file>
+        <file>icons/Chess_kdt45_king.svg</file>
+        <file>icons/Chess_klt45_king.svg</file>
+        <file>icons/Chess_ndt45_knight.svg</file>
+        <file>icons/Chess_nlt45_knight.svg</file>
+        <file>icons/Chess_pdt45_pawn.svg</file>
+        <file>icons/Chess_plt45_pawn.svg</file>
+        <file>icons/Chess_qdt45_queen.svg</file>
+        <file>icons/Chess_qlt45_queen.svg</file>
+        <file>icons/Chess_rdt45_rook.svg</file>
+        <file>icons/Chess_rlt45_rook.svg</file>
+        <file>icons/black_square.png</file>
+        <file>icons/square.png</file>
+</qresource>
+</RCC>

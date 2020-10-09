@@ -74,9 +74,9 @@ class Pawn : public Piece {
     public:
         Pawn(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                _icon.load("icons/Chess_plt45_pawn.svg");
+                _icon.load(":/icons/Chess_plt45_pawn.svg");
             } else {
-                _icon.load("icons/Chess_pdt45_pawn.svg");
+                _icon.load(":/icons/Chess_pdt45_pawn.svg");
             }
         };
 
@@ -94,9 +94,9 @@ class Knight : public Piece {
     public:
         Knight(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                _icon.load("icons/Chess_nlt45_knight.svg");
+                _icon.load(":/icons/Chess_nlt45_knight.svg");
             } else {
-                _icon.load("icons/Chess_ndt45_knight.svg");
+                _icon.load(":/icons/Chess_ndt45_knight.svg");
             }
         };
 
@@ -109,9 +109,9 @@ class Bishop : public Piece {
     public:
         Bishop(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                _icon.load("icons/Chess_blt45_bishop.svg");
+                _icon.load(":/icons/Chess_blt45_bishop.svg");
             } else {
-                _icon.load("icons/Chess_bdt45_bishop.svg");
+                _icon.load(":/icons/Chess_bdt45_bishop.svg");
             }
         };
 
@@ -124,9 +124,9 @@ class Rook : public Piece {
     public:
         Rook(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                _icon.load("icons/Chess_rlt45_rook.svg");
+                _icon.load(":/icons/Chess_rlt45_rook.svg");
             } else {
-                _icon.load("icons/Chess_rdt45_rook.svg");
+                _icon.load(":/icons/Chess_rdt45_rook.svg");
             }
         };
 
@@ -139,9 +139,9 @@ class Queen : public Piece {
     public:
         Queen(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                _icon.load("icons/Chess_qlt45_queen.svg");
+                _icon.load(":/icons/Chess_qlt45_queen.svg");
             } else {
-                _icon.load("icons/Chess_qdt45_queen.svg");
+                _icon.load(":/icons/Chess_qdt45_queen.svg");
             }
         };
 
@@ -154,9 +154,9 @@ class King : public Piece {
     public:
         King(PieceColor color, PieceType type): Piece(color, type) {
             if(color == PieceColor::White) {
-                _icon.load("icons/Chess_klt45_king.svg");
+                _icon.load(":/icons/Chess_klt45_king.svg");
             } else {
-                _icon.load("icons/Chess_kdt45_king.svg");
+                _icon.load(":/icons/Chess_kdt45_king.svg");
             }
         };
 
@@ -173,15 +173,6 @@ class Board {
         // Return the pointer of a piace at this specific location or nullptr the square is empty
         Piece* getPiece(Square place);
 
-        // Performns a move and return true if the move is valid, false otherwise
-        //virtual bool makeMove(Square start, Square end) = 0;
-
-        // The main gameplay loop
-        //virtual void run(void) = 0;
-
-        // Return true if the game got to a conclusion, false otherwise
-        //virtual bool gameOver(void) = 0;
-
     protected:
         PieceColor turn;
         unsigned int m_width, m_height;
@@ -191,11 +182,6 @@ class Board {
 
 class ChessGame : public Board {
     public:
-        // Square WKPosition;
-        // Square BKPosition;
-        //
-        //ChessGame();
-
         // Setup the initial position of the board
         void setupBoard() {
             for(int i = 7; i >= 0; i--) {
@@ -262,9 +248,6 @@ class ChessGame : public Board {
             return false;
         }
 
-        // The main gameplay loop
-        void run();
-
         // What piece is being checked
         PieceColor check();
 
@@ -273,6 +256,10 @@ class ChessGame : public Board {
 
         // Returns true if we got to a checkmate false if not
         bool checkMate(PieceColor status);
+
+        PieceColor colorTurn() {
+            return _turn;
+        }
 
         std::vector<Square*> get_set() {
             return chess_board;

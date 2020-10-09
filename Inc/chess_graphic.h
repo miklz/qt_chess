@@ -21,6 +21,7 @@ class GraphicBoard : public QWidget {
         QGridLayout *grid;
         Square *start;
         Square *end;
+        Square *last_valid_move;
 
         void mousePressEvent(QMouseEvent *ev);
         void mouseReleaseEvent(QMouseEvent *ev);
